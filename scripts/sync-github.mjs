@@ -354,8 +354,22 @@ function buildProject(repo, portfolioMeta, readme) {
     ? portfolioMeta.architectureImage.url
     : '';
 
-  // Status
-  let status = portfolioMeta?.status || 'Active';
+  // Status priority:
+  // 1. portfolio.yaml (explicit override)
+  // 2. GitHub repository topics (completed | in-progress | active)
+  // 3. Default: 'Active'
+  let status = portfolioMeta?.status;
+  if (!status) {
+    if (topics.includes('completed') || topics.includes('status-completed')) {
+      status = 'Completed';
+    } else if (topics.includes('in-progress') || topics.includes('status-in-progress') || topics.includes('wip')) {
+      status = 'In Progress';
+    } else if (topics.includes('active') || topics.includes('status-active')) {
+      status = 'Active';
+    } else {
+      status = 'Active';
+    }
+  }
   if (!VALID_STATUSES.includes(status)) status = 'Active';
 
   // Date

@@ -49,6 +49,9 @@ For any GitHub repository you want to appear in the portfolio:
 | Topic | Effect |
 |-------|--------|
 | `featured` | Shows the project on the homepage |
+| `completed` or `status-completed` | Status → **Completed** |
+| `in-progress` or `status-in-progress` | Status → **In Progress** |
+| `active` or `status-active` | Status → **Active** |
 | `backend` | Category → Backend |
 | `distributed-systems` | Category → Distributed Systems |
 | `cloud` or `infrastructure` | Category → Cloud |
