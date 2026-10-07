@@ -1,0 +1,19 @@
+# Build & Cache
+dist/
+.astro/
+
+# Dependencies
+node_modules/
+
+# Environment Variables
+.env
+.env.production
+.env.local
+
+# OS Metadata
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/

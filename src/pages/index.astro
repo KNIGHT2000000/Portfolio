@@ -1,0 +1,74 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Hero from '@/components/Hero.astro';
+import EngineeringFocus from '@/components/EngineeringFocus.astro';
+import ProjectGrid from '@/components/ProjectGrid.astro';
+import CurrentlyBuilding from '@/components/CurrentlyBuilding.astro';
+import BlogLinks from '@/components/BlogLinks.astro';
+import ContactCta from '@/components/ContactCta.astro';
+import { projects } from '@/data/projects';
+import { resolveUrl } from '@/utils/url';
+import { siteConfig } from '@/data/siteConfig';
+
+// Filter featured projects for homepage
+const featuredProjects = projects.filter((p) => p.featured);
+---
+
+<BaseLayout title={siteConfig.title} description={siteConfig.description}>
+  <!-- Hero Section -->
+  <Hero />
+
+  <!-- Engineering Focus (4-6 Cards) -->
+  <EngineeringFocus />
+
+  <!-- Selected Featured Projects -->
+  <section class="section" id="projects">
+    <div class="container">
+      <div class="section-header-flex">
+        <div>
+          <span class="section-label">Case Studies</span>
+          <h2 class="section-title">Selected Projects</h2>
+          <p class="section-desc">
+            Production-oriented architectures showcasing distributed state, asynchronous pipelines, and cloud infrastructure.
+          </p>
+        </div>
+
+        <a href={resolveUrl('/projects')} class="btn btn-outline view-all-btn">
+          View All Projects ({projects.length}) →
+        </a>
+      </div>
+
+      <ProjectGrid projects={featuredProjects} />
+    </div>
+  </section>
+
+  <!-- Currently Building -->
+  <CurrentlyBuilding />
+
+  <!-- Selected Engineering Writing / Notes -->
+  <BlogLinks />
+
+  <!-- Direct Communication & Contact CTA -->
+  <ContactCta />
+</BaseLayout>
+
+<style>
+  .section-header-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 2.5rem;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .view-all-btn {
+    align-self: flex-start;
+  }
+
+  @media (min-width: 641px) {
+    .view-all-btn {
+      align-self: flex-end;
+    }
+  }
+</style>

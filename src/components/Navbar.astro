@@ -1,0 +1,385 @@
+---
+import { profile } from '@/data/profile';
+import { resolveUrl } from '@/utils/url';
+import ThemeToggle from './ThemeToggle.astro';
+
+interface Props {
+  currentPath?: string;
+}
+
+const { currentPath = '/' } = Astro.props;
+
+const navItems = [
+  { label: 'Home', href: resolveUrl('/') },
+  { label: 'Projects', href: resolveUrl('/projects') },
+  { label: 'Engineering', href: resolveUrl('/engineering') },
+  { label: 'About', href: resolveUrl('/about') },
+  { label: 'Resume', href: resolveUrl('/resume'), isResume: true }
+];
+
+// Normalize current path for matching active links
+const normalizedPath = currentPath.endsWith('/') && currentPath !== '/' ? currentPath.slice(0, -1) : currentPath;
+---
+
+<header class="navbar">
+  <div class="container nav-container">
+    <!-- Brand / Monogram -->
+    <a href={resolveUrl('/')} class="brand-link" aria-label="Home">
+      <span class="brand-terminal">&gt;</span>
+      <span class="brand-name">{profile.name}</span>
+      <span class="brand-badge">backend</span>
+    </a>
+
+    <!-- Desktop Navigation Links -->
+    <nav class="desktop-nav" aria-label="Primary Desktop Navigation">
+      <ul class="nav-list">
+        {navItems.map((item) => {
+          const isActive = item.href === normalizedPath || (item.href !== resolveUrl('/') && normalizedPath.startsWith(item.href));
+          return (
+            <li>
+              <a
+                href={item.href}
+                class:list={['nav-link', { active: isActive, 'resume-link': item.isResume }]}
+                aria-current={isActive ? 'page' : undefined}
+                {...(item.isResume ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+              >
+                {item.label}
+                {item.isResume && (
+                  <svg class="external-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <line x1="10" y1="14" x2="21" y2="3"></line>
+                  </svg>
+                )}
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    </nav>
+
+    <!-- Right Side Actions: Social Icons + Theme Toggle + Mobile Menu Trigger -->
+    <div class="nav-actions">
+      <!-- GitHub Link -->
+      {profile.github && (
+        <a
+          href={profile.github}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="social-nav-link"
+          aria-label="GitHub Profile"
+          title="GitHub"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+          </svg>
+        </a>
+      )}
+
+      <!-- LinkedIn Link -->
+      {profile.linkedin && (
+        <a
+          href={profile.linkedin}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="social-nav-link"
+          aria-label="LinkedIn Profile"
+          title="LinkedIn"
+        >
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+          </svg>
+        </a>
+      )}
+
+      <ThemeToggle />
+
+      <!-- Mobile Hamburger Button -->
+      <button
+        id="mobile-nav-toggle"
+        class="mobile-menu-btn"
+        aria-label="Open mobile navigation menu"
+        aria-expanded="false"
+        aria-controls="mobile-nav-drawer"
+      >
+        <span class="hamburger-bar"></span>
+        <span class="hamburger-bar"></span>
+        <span class="hamburger-bar"></span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Dropdown Navigation Drawer -->
+  <div id="mobile-nav-drawer" class="mobile-nav-drawer" aria-hidden="true">
+    <div class="mobile-nav-inner container">
+      <ul class="mobile-nav-list">
+        {navItems.map((item) => {
+          const isActive = item.href === normalizedPath || (item.href !== resolveUrl('/') && normalizedPath.startsWith(item.href));
+          return (
+            <li>
+              <a
+                href={item.href}
+                class:list={['mobile-nav-link', { active: isActive }]}
+                aria-current={isActive ? 'page' : undefined}
+                {...(item.isResume ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+              >
+                {item.label}
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+      <div class="mobile-socials">
+        {profile.github && (
+          <a href={profile.github} target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm">
+            GitHub
+          </a>
+        )}
+        {profile.linkedin && (
+          <a href={profile.linkedin} target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm">
+            LinkedIn
+          </a>
+        )}
+      </div>
+    </div>
+  </div>
+</header>
+
+<style>
+  .navbar {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    height: var(--nav-height);
+    background-color: var(--bg-surface);
+    border-bottom: 1px solid var(--border-color);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    transition: background-color var(--transition-normal), border-color var(--transition-normal);
+  }
+
+  .nav-container {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  /* Brand */
+  .brand-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    text-decoration: none;
+  }
+
+  .brand-terminal {
+    color: var(--accent-primary);
+    font-weight: 700;
+  }
+
+  .brand-name {
+    letter-spacing: -0.01em;
+  }
+
+  .brand-badge {
+    font-size: 0.6875rem;
+    padding: 0.15rem 0.4rem;
+    border-radius: var(--radius-sm);
+    background-color: var(--accent-surface);
+    color: var(--accent-text);
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+  }
+
+  /* Desktop Nav */
+  .desktop-nav {
+    display: block;
+  }
+
+  .nav-list {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    list-style: none;
+  }
+
+  .nav-link {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-decoration: none;
+    padding: 0.4rem 0.2rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    position: relative;
+    transition: color var(--transition-fast);
+  }
+
+  .nav-link:hover {
+    color: var(--text-primary);
+  }
+
+  .nav-link.active {
+    color: var(--accent-primary);
+    font-weight: 600;
+  }
+
+  .nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background-color: var(--accent-primary);
+    border-radius: 2px;
+  }
+
+  .external-icon {
+    opacity: 0.7;
+  }
+
+  /* Nav Actions */
+  .nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .social-nav-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-md);
+    color: var(--text-secondary);
+    transition: color var(--transition-fast), background-color var(--transition-fast);
+  }
+
+  .social-nav-link:hover {
+    color: var(--text-primary);
+    background-color: var(--bg-surface-elevated);
+  }
+
+  /* Mobile Button & Drawer */
+  .mobile-menu-btn {
+    display: none;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 36px;
+    height: 36px;
+    padding: 8px 6px;
+    background: transparent;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+  }
+
+  .hamburger-bar {
+    width: 100%;
+    height: 2px;
+    background-color: var(--text-primary);
+    border-radius: 2px;
+    transition: transform var(--transition-fast), opacity var(--transition-fast);
+  }
+
+  .mobile-nav-drawer {
+    display: none;
+    position: absolute;
+    top: var(--nav-height);
+    left: 0;
+    right: 0;
+    background-color: var(--bg-surface);
+    border-bottom: 1px solid var(--border-color);
+    padding: 1.5rem 0;
+    box-shadow: var(--shadow-md);
+  }
+
+  .mobile-nav-drawer.open {
+    display: block;
+  }
+
+  .mobile-nav-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .mobile-nav-link {
+    display: block;
+    padding: 0.625rem 0.5rem;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+  }
+
+  .mobile-nav-link:hover,
+  .mobile-nav-link.active {
+    color: var(--accent-primary);
+    background-color: var(--bg-subtle);
+  }
+
+  .mobile-socials {
+    display: flex;
+    gap: 0.75rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+  }
+
+  @media (max-width: 768px) {
+    .desktop-nav {
+      display: none;
+    }
+    .mobile-menu-btn {
+      display: flex;
+    }
+    .social-nav-link {
+      display: none;
+    }
+  }
+</style>
+
+<script is:inline>
+  function setupMobileNav() {
+    const toggle = document.getElementById('mobile-nav-toggle');
+    const drawer = document.getElementById('mobile-nav-drawer');
+    if (!toggle || !drawer) return;
+
+    toggle.addEventListener('click', () => {
+      const isOpen = drawer.classList.contains('open');
+      if (isOpen) {
+        drawer.classList.remove('open');
+        drawer.setAttribute('aria-hidden', 'true');
+        toggle.setAttribute('aria-expanded', 'false');
+      } else {
+        drawer.classList.add('open');
+        drawer.setAttribute('aria-hidden', 'false');
+        toggle.setAttribute('aria-expanded', 'true');
+      }
+    });
+
+    // Close menu when clicking outside or resizing to desktop
+    window.addEventListener('resize', () => {
+      if (window.innerWidth > 768 && drawer.classList.contains('open')) {
+        drawer.classList.remove('open');
+        drawer.setAttribute('aria-hidden', 'true');
+        toggle.setAttribute('aria-expanded', 'false');
+      }
+    });
+  }
+
+  setupMobileNav();
+  document.addEventListener('astro:after-swap', setupMobileNav);
+</script>

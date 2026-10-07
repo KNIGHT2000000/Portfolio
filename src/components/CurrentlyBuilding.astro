@@ -1,0 +1,109 @@
+---
+import { currentlyBuilding } from '@/data/building';
+---
+
+<section class="section currently-building-section">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">Active Work</span>
+      <h2 class="section-title">Currently Building</h2>
+      <p class="section-desc">
+        Technical domains, architecture experiments, and engineering deep-dives currently on my workbench.
+      </p>
+    </div>
+
+    <div class="building-grid">
+      {currentlyBuilding.map((item) => (
+        <div class="card building-card">
+          <div class="building-card-top">
+            <span class="building-number">{item.number}</span>
+            <span class="building-status-pill">In Progress</span>
+          </div>
+
+          <h3 class="building-topic">{item.topic}</h3>
+          <p class="building-description">{item.description}</p>
+
+          {item.technologies && item.technologies.length > 0 && (
+            <div class="building-tech-row">
+              {item.technologies.map((t) => (
+                <span class="tag">{t}</span>
+              ))}
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .building-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .building-card {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 1.75rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .building-card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+
+  .building-number {
+    font-family: var(--font-mono);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--accent-primary);
+  }
+
+  .building-status-pill {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    padding: 0.15rem 0.5rem;
+    border-radius: 9999px;
+    background-color: var(--accent-surface);
+    color: var(--accent-text);
+  }
+
+  .building-topic {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.75rem;
+    line-height: 1.35;
+  }
+
+  .building-description {
+    font-size: 0.9375rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 1.25rem;
+    flex-grow: 1;
+  }
+
+  .building-tech-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+  }
+
+  @media (max-width: 640px) {
+    .building-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

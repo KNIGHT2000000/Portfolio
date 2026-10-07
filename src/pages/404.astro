@@ -1,0 +1,75 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { resolveUrl } from '@/utils/url';
+---
+
+<BaseLayout title="404 — Resource Not Found" description="The requested route or resource does not exist on this server.">
+  <div class="container not-found-container">
+    <div class="card not-found-card">
+      <div class="status-code">HTTP 404</div>
+      <h1 class="not-found-title">Resource Not Found</h1>
+      <p class="not-found-desc">
+        The requested URI does not match any static route, API contract, or active case study.
+      </p>
+
+      <div class="not-found-actions">
+        <a href={resolveUrl('/')} class="btn btn-primary">
+          Return to System Dashboard
+        </a>
+        <a href={resolveUrl('/projects')} class="btn btn-secondary">
+          Explore Projects
+        </a>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .not-found-container {
+    min-height: calc(100vh - var(--nav-height) - 250px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+  }
+
+  .not-found-card {
+    max-width: 540px;
+    width: 100%;
+    padding: 3rem 2rem;
+    text-align: center;
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-surface);
+  }
+
+  .status-code {
+    font-family: var(--font-mono);
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--accent-primary);
+    margin-bottom: 0.75rem;
+    letter-spacing: 0.05em;
+  }
+
+  .not-found-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+  }
+
+  .not-found-desc {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 2rem;
+  }
+
+  .not-found-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+</style>

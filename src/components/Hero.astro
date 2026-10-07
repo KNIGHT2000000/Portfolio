@@ -1,0 +1,223 @@
+---
+import { profile } from '@/data/profile';
+import { resolveUrl } from '@/utils/url';
+---
+
+<section class="hero-section">
+  <div class="container hero-container">
+    <!-- Status / Role Indicator -->
+    <div class="hero-status">
+      <span class="status-indicator">
+        <span class="pulse-dot"></span>
+        <span class="status-label">{profile.availability || 'Available for Backend & Cloud Roles'}</span>
+      </span>
+      {profile.location && (
+        <span class="location-badge">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+            <circle cx="12" cy="10" r="3"></circle>
+          </svg>
+          {profile.location}
+        </span>
+      )}
+    </div>
+
+    <!-- Main Headline -->
+    <div class="hero-content">
+      <h1 class="hero-name">{profile.name}</h1>
+      <p class="hero-role">{profile.role}</p>
+
+      <p class="hero-summary">
+        {profile.summary}
+      </p>
+
+      <!-- Action Buttons -->
+      <div class="hero-actions">
+        <a href={resolveUrl('/projects')} class="btn btn-primary">
+          View Projects
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </a>
+
+        {profile.github && (
+          <a
+            href={profile.github}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn btn-secondary"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+            </svg>
+            GitHub
+          </a>
+        )}
+
+        {profile.resume && (
+          <a
+            href={profile.resume.startsWith('http') ? profile.resume : resolveUrl(profile.resume)}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn btn-outline"
+          >
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+              <polyline points="10 9 9 9 8 9"></polyline>
+            </svg>
+            Resume
+          </a>
+        )}
+      </div>
+    </div>
+
+    <!-- Quick Architectural Focus Bar -->
+    <div class="hero-tech-strip">
+      <div class="tech-strip-item">
+        <span class="strip-label">Systems:</span>
+        <span class="strip-val">Distributed • Event-Driven • REST / gRPC</span>
+      </div>
+      <div class="tech-strip-item">
+        <span class="strip-label">Cloud:</span>
+        <span class="strip-val">AWS • Docker • Kubernetes • Linux</span>
+      </div>
+      <div class="tech-strip-item">
+        <span class="strip-label">Data:</span>
+        <span class="strip-val">PostgreSQL • Kafka • Redis</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero-section {
+    padding-top: 5rem;
+    padding-bottom: 4rem;
+    border-bottom: 1px solid var(--border-color);
+    background: linear-gradient(180deg, var(--bg-surface) 0%, var(--bg-primary) 100%);
+  }
+
+  .hero-container {
+    max-width: var(--max-width);
+  }
+
+  .hero-status {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .status-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.25rem 0.65rem;
+    border-radius: 9999px;
+    background-color: var(--accent-emerald-surface);
+    color: var(--accent-emerald);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+
+  .pulse-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background-color: var(--accent-emerald);
+    box-shadow: 0 0 0 2px var(--accent-emerald-surface);
+  }
+
+  .location-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--text-muted);
+  }
+
+  .hero-content {
+    max-width: 780px;
+  }
+
+  .hero-name {
+    font-size: clamp(2.25rem, 5vw, 3.5rem);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+  }
+
+  .hero-role {
+    font-family: var(--font-mono);
+    font-size: clamp(1.125rem, 2.5vw, 1.375rem);
+    font-weight: 600;
+    color: var(--accent-primary);
+    margin-bottom: 1.25rem;
+    letter-spacing: -0.01em;
+  }
+
+  .hero-summary {
+    font-size: clamp(1.0625rem, 2vw, 1.25rem);
+    line-height: 1.6;
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+  }
+
+  .hero-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 2.5rem;
+  }
+
+  /* Tech Strip */
+  .hero-tech-strip {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px dashed var(--border-color);
+  }
+
+  .tech-strip-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+  }
+
+  .strip-label {
+    color: var(--text-muted);
+    font-weight: 600;
+  }
+
+  .strip-val {
+    color: var(--text-secondary);
+  }
+
+  @media (max-width: 640px) {
+    .hero-section {
+      padding-top: 3.5rem;
+      padding-bottom: 2.5rem;
+    }
+    .hero-actions {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .hero-tech-strip {
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+  }
+</style>

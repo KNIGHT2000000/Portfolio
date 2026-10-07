@@ -1,0 +1,87 @@
+---
+import { engineeringFocusAreas } from '@/data/skills';
+---
+
+<section class="section" id="focus">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">Core Domains</span>
+      <h2 class="section-title">Engineering Focus</h2>
+      <p class="section-desc">
+        Specialized domains and architectural systems where I focus on delivering scalable, observable, and failure-resilient backend systems.
+      </p>
+    </div>
+
+    <div class="focus-grid">
+      {engineeringFocusAreas.map((area) => (
+        <article class="card focus-card">
+          <div class="focus-card-header">
+            <h3 class="focus-title">{area.title}</h3>
+          </div>
+          <p class="focus-summary">{area.summary}</p>
+          <div class="focus-tags">
+            {area.tags.map((tag) => (
+              <span class="tag">{tag}</span>
+            ))}
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .focus-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .focus-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    border-radius: var(--radius-lg);
+    background-color: var(--bg-surface);
+    transition: transform var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
+  }
+
+  .focus-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--border-accent);
+  }
+
+  .focus-card-header {
+    margin-bottom: 0.75rem;
+  }
+
+  .focus-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    letter-spacing: -0.01em;
+  }
+
+  .focus-summary {
+    font-size: 0.9375rem;
+    color: var(--text-secondary);
+    line-height: 1.55;
+    margin-bottom: 1.25rem;
+    flex-grow: 1;
+  }
+
+  .focus-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+  }
+
+  @media (max-width: 640px) {
+    .focus-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

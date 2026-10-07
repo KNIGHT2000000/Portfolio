@@ -1,0 +1,556 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { projects, type Project } from '@/data/projects';
+import { resolveUrl } from '@/utils/url';
+import { siteConfig } from '@/data/siteConfig';
+
+export async function getStaticPaths() {
+  return projects.map((project) => ({
+    params: { slug: project.slug },
+    props: { project }
+  }));
+}
+
+interface Props {
+  project: Project;
+}
+
+const { project } = Astro.props;
+
+const pageTitle = `${project.title} — System Architecture & Engineering Case Study`;
+const pageDesc = project.longDescription || project.description;
+
+// Check if any documentation links exist
+const hasDocs = project.documentation && (
+  project.documentation.architecture ||
+  project.documentation.api ||
+  project.documentation.deployment ||
+  project.documentation.general
+);
+---
+
+<BaseLayout title={pageTitle} description={pageDesc}>
+  <article class="case-study-page">
+    <!-- Breadcrumb & Top Bar -->
+    <div class="case-study-header">
+      <div class="container container-narrow">
+        <nav class="breadcrumb" aria-label="Breadcrumb navigation">
+          <a href={resolveUrl('/projects')}>← All Projects</a>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-current">{project.category}</span>
+        </nav>
+
+        <div class="header-main">
+          <div class="header-badge-row">
+            <span class="tag tag-accent">{project.category}</span>
+            {project.status && (
+              <span class="status-badge">
+                <span class="status-dot"></span>
+                {project.status}
+              </span>
+            )}
+            {project.date && <span class="tag">{project.date}</span>}
+          </div>
+
+          <h1 class="project-headline">{project.title}</h1>
+          <p class="project-subheading">{project.description}</p>
+
+          <!-- Technology Badges -->
+          <div class="tech-tag-group">
+            {project.technologies.map((tech) => (
+              <span class="tag">{tech}</span>
+            ))}
+          </div>
+
+          <!-- Primary Direct Links Bar -->
+          <div class="project-quick-links">
+            {project.github && (
+              <a
+                href={project.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="btn btn-primary btn-sm"
+              >
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+                </svg>
+                View Source Code
+              </a>
+            )}
+
+            {project.demo && (
+              <a
+                href={project.demo}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="btn btn-secondary btn-sm"
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+                Live Demo
+              </a>
+            )}
+
+            {project.blog?.url && (
+              <a
+                href={project.blog.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="btn btn-outline btn-sm"
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M12 20h9"></path>
+                  <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                </svg>
+                Read Engineering Write-up
+              </a>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Case Study Sections -->
+    <div class="container container-narrow case-study-body">
+      <!-- 1. Problem Statement -->
+      {project.problem && (
+        <section class="cs-section">
+          <h2 class="cs-section-title">
+            <span class="cs-num">01</span> The Problem
+          </h2>
+          <div class="card cs-card problem-card">
+            <p>{project.problem}</p>
+          </div>
+        </section>
+      )}
+
+      <!-- 2. The Solution -->
+      {project.solution && (
+        <section class="cs-section">
+          <h2 class="cs-section-title">
+            <span class="cs-num">02</span> The Architectural Solution
+          </h2>
+          <div class="card cs-card">
+            <p>{project.solution}</p>
+            {project.longDescription && (
+              <p class="cs-secondary-paragraph">{project.longDescription}</p>
+            )}
+          </div>
+        </section>
+      )}
+
+      <!-- 3. Architecture Schematic -->
+      {project.architectureImage && (
+        <section class="cs-section">
+          <h2 class="cs-section-title">
+            <span class="cs-num">03</span> Architecture Diagram
+          </h2>
+          <div class="card diagram-container">
+            <img
+              src={resolveUrl(project.architectureImage)}
+              alt={`System Architecture Topology for ${project.title}`}
+              loading="lazy"
+              width="960"
+              height="420"
+              class="architecture-svg"
+            />
+          </div>
+        </section>
+      )}
+
+      <!-- 4. Engineering Challenges -->
+      {project.challenges && project.challenges.length > 0 && (
+        <section class="cs-section">
+          <h2 class="cs-section-title">
+            <span class="cs-num">04</span> Engineering Challenges &amp; Edge Cases
+          </h2>
+          <div class="challenges-grid">
+            {project.challenges.map((challenge, idx) => (
+              <div class="card challenge-card">
+                <span class="challenge-index">Challenge 0{idx + 1}</span>
+                <p class="challenge-text">{challenge}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      <!-- 5. Key Design Decisions & Trade-offs -->
+      {project.decisions && project.decisions.length > 0 && (
+        <section class="cs-section">
+          <h2 class="cs-section-title">
+            <span class="cs-num">05</span> Architectural Decisions &amp; Trade-offs
+          </h2>
+          <div class="decisions-stack">
+            {project.decisions.map((decision) => (
+              <div class="card decision-card">
+                <h3 class="decision-title">{decision.title}</h3>
+                <p class="decision-desc">{decision.description}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      <!-- 6. Technical Documentation Links (Strictly conditional) -->
+      {hasDocs && (
+        <section class="cs-section">
+          <h2 class="cs-section-title">
+            <span class="cs-num">06</span> Engineering Documentation
+          </h2>
+          <div class="docs-links-grid">
+            {project.documentation?.architecture && (
+              <a
+                href={project.documentation.architecture}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="card doc-item-card"
+              >
+                <div class="doc-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                    <line x1="8" y1="21" x2="16" y2="21"></line>
+                    <line x1="12" y1="17" x2="12" y2="21"></line>
+                  </svg>
+                </div>
+                <div class="doc-text">
+                  <span class="doc-title">Architecture Specification</span>
+                  <span class="doc-hint">Detailed component topology &amp; data flow ↗</span>
+                </div>
+              </a>
+            )}
+
+            {project.documentation?.api && (
+              <a
+                href={project.documentation.api}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="card doc-item-card"
+              >
+                <div class="doc-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <polyline points="16 18 22 12 16 6"></polyline>
+                    <polyline points="8 6 2 12 8 18"></polyline>
+                  </svg>
+                </div>
+                <div class="doc-text">
+                  <span class="doc-title">API Contracts &amp; Schemas</span>
+                  <span class="doc-hint">Endpoints, payloads, and error codes ↗</span>
+                </div>
+              </a>
+            )}
+
+            {project.documentation?.deployment && (
+              <a
+                href={project.documentation.deployment}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="card doc-item-card"
+              >
+                <div class="doc-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                  </svg>
+                </div>
+                <div class="doc-text">
+                  <span class="doc-title">Deployment &amp; Runbook</span>
+                  <span class="doc-hint">Containerization, configs &amp; environment variables ↗</span>
+                </div>
+              </a>
+            )}
+
+            {project.documentation?.general && (
+              <a
+                href={project.documentation.general}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="card doc-item-card"
+              >
+                <div class="doc-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                  </svg>
+                </div>
+                <div class="doc-text">
+                  <span class="doc-title">General Documentation</span>
+                  <span class="doc-hint">Project overview &amp; repository guide ↗</span>
+                </div>
+              </a>
+            )}
+          </div>
+        </section>
+      )}
+
+      <!-- Bottom Nav / Back to All Projects -->
+      <div class="bottom-case-nav">
+        <a href={resolveUrl('/projects')} class="btn btn-secondary">
+          ← Back to All Projects
+        </a>
+
+        {project.github && (
+          <a
+            href={project.github}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn btn-outline"
+          >
+            Review Source Repository ↗
+          </a>
+        )}
+      </div>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .case-study-page {
+    padding-bottom: 5rem;
+  }
+
+  .case-study-header {
+    background-color: var(--bg-surface);
+    border-bottom: 1px solid var(--border-color);
+    padding: 3rem 0;
+  }
+
+  .breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+  }
+
+  .breadcrumb a {
+    color: var(--text-secondary);
+    text-decoration: none;
+  }
+
+  .breadcrumb a:hover {
+    color: var(--accent-primary);
+  }
+
+  .breadcrumb-separator {
+    color: var(--border-color);
+  }
+
+  .header-badge-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.875rem;
+    flex-wrap: wrap;
+  }
+
+  .project-headline {
+    font-size: clamp(2.25rem, 5vw, 3.25rem);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+    color: var(--text-primary);
+    margin-bottom: 0.875rem;
+  }
+
+  .project-subheading {
+    font-size: 1.125rem;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+  }
+
+  .tech-tag-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-bottom: 2rem;
+  }
+
+  .project-quick-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-color);
+  }
+
+  /* Body Sections */
+  .case-study-body {
+    padding-top: 3.5rem;
+  }
+
+  .cs-section {
+    margin-bottom: 3.5rem;
+  }
+
+  .cs-section-title {
+    font-size: 1.375rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .cs-num {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    color: var(--accent-primary);
+    font-weight: 700;
+  }
+
+  .cs-card {
+    padding: 1.75rem;
+    line-height: 1.7;
+    font-size: 1rem;
+    color: var(--text-secondary);
+  }
+
+  .problem-card {
+    border-left: 3px solid var(--accent-primary);
+  }
+
+  .cs-secondary-paragraph {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px dashed var(--border-color);
+  }
+
+  /* Diagram */
+  .diagram-container {
+    padding: 1rem;
+    background-color: var(--bg-surface);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+  }
+
+  .architecture-svg {
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-sm);
+  }
+
+  /* Challenges Grid */
+  .challenges-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.25rem;
+  }
+
+  .challenge-card {
+    padding: 1.5rem;
+    background-color: var(--bg-surface);
+  }
+
+  .challenge-index {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--accent-primary);
+    margin-bottom: 0.5rem;
+  }
+
+  .challenge-text {
+    font-size: 0.9375rem;
+    color: var(--text-secondary);
+    line-height: 1.55;
+  }
+
+  /* Decisions Stack */
+  .decisions-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .decision-card {
+    padding: 1.75rem;
+  }
+
+  .decision-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+  }
+
+  .decision-desc {
+    font-size: 0.9375rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  /* Docs Links */
+  .docs-links-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1rem;
+  }
+
+  .doc-item-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1.25rem;
+    text-decoration: none;
+    transition: transform var(--transition-fast), border-color var(--transition-fast);
+  }
+
+  .doc-item-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent-primary);
+  }
+
+  .doc-icon {
+    color: var(--accent-primary);
+    padding-top: 0.15rem;
+  }
+
+  .doc-title {
+    display: block;
+    font-weight: 600;
+    font-size: 0.9375rem;
+    color: var(--text-primary);
+    margin-bottom: 0.25rem;
+  }
+
+  .doc-hint {
+    display: block;
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+  }
+
+  /* Bottom Navigation */
+  .bottom-case-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border-color);
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  @media (max-width: 640px) {
+    .case-study-header {
+      padding: 2rem 0;
+    }
+    .project-quick-links {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .bottom-case-nav {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  }
+</style>
