@@ -1,0 +1,68 @@
+# portfolio.yaml
+# ──────────────────────────────────────────────────────────────────────────────
+# Place this file at the ROOT of any GitHub repository you want to appear
+# in your portfolio. All fields are OPTIONAL — the sync script falls back to
+# GitHub metadata (repo name, description, topics, language) for missing fields.
+#
+# Full reference for every supported field:
+# ──────────────────────────────────────────────────────────────────────────────
+
+# Custom display title.
+# Default: repository name (hyphens converted to title case)
+title: "My Project Name"
+
+# Short description shown on the project card and detail page.
+# Default: GitHub repository description
+description: "A concise description of what this project does and why it matters."
+
+# Project category. Must be EXACTLY one of:
+#   Distributed Systems | Backend | Cloud | DevOps | AI Systems
+# Default: inferred from repository topics (e.g. kafka → Distributed Systems)
+category: "Backend"
+
+# Status badge shown on the project detail page.
+# Options: Completed | Active | In Progress
+# Default: Active
+status: "Completed"
+
+# Whether to show in the "Featured" section on the homepage.
+# Default: true if the "featured" topic is added to the repo, otherwise false
+featured: false
+
+# Controls sort order on the /projects page (lower = shown first).
+# Default: 999 (appended after sorted entries)
+order: 1
+
+# Override the technology stack list.
+# Default: inferred from repository topics and primary language
+technologies:
+  - Java
+  - Spring Boot
+  - Apache Kafka
+  - PostgreSQL
+  - Docker
+  - Redis
+
+# Optional external links — only shown in the UI if present and valid URLs
+documentation:
+  # Link to architecture diagram, design doc, or README section
+  architecture: "https://github.com/your-username/your-repo#architecture"
+  # Link to API spec (OpenAPI, Postman, etc.)
+  api: "https://github.com/your-username/your-repo#api-reference"
+  # Link to deployment runbook or infrastructure docs
+  deployment: "https://github.com/your-username/your-repo#deployment"
+  # Link to any general documentation page
+  general: "https://your-docs-site.example.com"
+
+# Optional link to an engineering blog post about this project
+blog:
+  title: "How I Built XYZ with the Outbox Pattern"
+  url: "https://your-blog.example.com/your-post"
+
+# Optional live demo link
+demo:
+  url: "https://your-demo.example.com"
+
+# Optional architecture diagram image
+architectureImage:
+  url: "https://raw.githubusercontent.com/your-username/your-repo/main/docs/architecture.png"
